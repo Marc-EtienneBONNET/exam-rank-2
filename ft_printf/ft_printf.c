@@ -22,13 +22,12 @@ void	ft_write(char c)
 	TOTALE++;
 }
 
-int	ft_putstr(char *str)
+void	ft_putstr(char *str)
 {
 	int	x = -1;
 
 	while (str[++x])
 		ft_write(str[x]);
-	return (x);
 }
 
 int	check_size(int number)
@@ -97,13 +96,11 @@ char	*get_num(int number, int size)
 	return (str);
 }
 
-char	*get_long(unsigned int number)
+char	*get_long(unsigned int number, int size)
 {
 	char	*str;
-	int		size;
 	char	*array_hex = "0123456789abcdef";
 
-	size = check_long(number);
 	str = malloc(sizeof(char) * (size + 1));
 	str[size] = '\0';
 	if (number == 0)
@@ -116,8 +113,7 @@ char	*get_long(unsigned int number)
 		str[size] = array_hex[number % 16];
 		number /= 16;
 	}
-	if (size == 0)
-		str[size] = array_hex[number % 16];
+	str[size] = array_hex[number % 16];
 	return (str);
 }
 
@@ -135,8 +131,10 @@ void	print_int(va_list value)
 void	print_xxx(va_list value)
 {
 	char			*str;
+	unsigned int	number;
 
-	str = get_long(va_arg(value, unsigned int));
+	number = va_arg(value, unsigned int);
+	str = get_long(number, check_long(number));
 	ft_putstr(str);
 	free(str);
 }
@@ -180,4 +178,10 @@ int	ft_printf(char *str, ...)
 	}
 	va_end(value);
 	return (TOTALE);
+}
+
+int main()
+{
+	ft_printf("bonjour, (%x)\n",127);
+	return (1);
 }
