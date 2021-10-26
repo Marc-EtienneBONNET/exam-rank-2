@@ -6,7 +6,7 @@
 /*   By: mbonnet <mbonnet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 15:42:53 by mbonnet           #+#    #+#             */
-/*   Updated: 2021/10/25 18:04:19 by mbonnet          ###   ########.fr       */
+/*   Updated: 2021/10/26 10:05:56 by mbonnet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	check_size(int number)
 	return (len);
 }
 
-int	check_long(int number)
+int	check_long(unsigned int number)
 {
 	int	len;
 
