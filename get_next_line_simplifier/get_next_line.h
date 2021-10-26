@@ -15,7 +15,7 @@
 
 #include <unistd.h>
 #include <stdlib.h>
-#define BUFFER_SIZE 1
+#define BUFFER_SIZE 1000000
 
 char	*get_next_line(int	fd);
 

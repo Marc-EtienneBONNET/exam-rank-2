@@ -9,7 +9,7 @@
 /*   Updated: 2021/10/26 11:44:32 by mbonnet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include "stdio.h"
 #include "get_next_line.h"
 
 int ft_strlen(char *str)
@@ -70,42 +70,56 @@ char	*cut_next_line(char *remains)
 
 	i = 0;
 	j = 0;
-	while (remains[i] && remains[i] != '\n')
-		i++;
-	if (remains[i])
+	while (remains[i] && remains[i++] != '\n');
+	if (!remains[i])
 	{
 		free(remains);
 		return (NULL);
 	}
 	if (!(array = (char *)malloc(sizeof(char) * (ft_strlen(remains)- i + 1))))
 		return (NULL);
-	i++;
-	while (remains[i])
+	while (remains[++i])
 	{
-		array[j] = remains[i];
-		j++;
-		i++;
+		array[j++] = remains[i];
 	}
 	array[j] = '\0';
 	free(remains);
 	return (array);
 }
 
+int	ft_check_nl(char *str)
+{
+	int i;
+
+	i = -1;
+	while (str && str[++i])
+		if (str[i] == '\n')
+			return (1);
+	return (0);
+}
+
 char	*get_next_line(int fd)
 {
-	char		buffer[BUFFER_SIZE + 1];
-	static char	*remains;
+	char		*buffer;
+	static char	*remains = NULL;
 	static int	fin = 0;
 	int			count;
 	char		*line;
 
 	count = 1;
+	buffer = NULL;
+	if (remains == NULL)
+		if (!(buffer=malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+			return (NULL);
 	if (fin == 1)
 		return (NULL);
-	while (buffer[0] != '\n' && count != 0)
+	while (!ft_check_nl(buffer) && count != 0)
 	{
 		if ((count = read(fd, buffer, BUFFER_SIZE)) == -1)
+		{
+			free(buffer);
 			return (NULL);
+		}
 		buffer[count] = '\0';
 		remains = ft_strjoin(remains, buffer);
 	}
@@ -113,5 +127,6 @@ char	*get_next_line(int fd)
 	remains = cut_next_line(remains);
 	if (count == 0)
 		fin = 1;
+	free(buffer);
 	return (line);
 }
