@@ -6,7 +6,7 @@
 /*   By: mbonnet <mbonnet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 10:08:21 by mbonnet           #+#    #+#             */
-/*   Updated: 2021/10/26 11:06:31 by mbonnet          ###   ########.fr       */
+/*   Updated: 2021/10/26 11:44:32 by mbonnet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 int ft_strlen(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
+	while (str && str[i])
 		i++;
 	return (i);
 }
@@ -38,43 +36,28 @@ char	*ft_strjoin(char *remains, char *buffer)
 		return (NULL);
 	i = 0;
 	j = 0;
-	if (remains)
-	{
-		while (remains[i])
-		{
-			array[j] = remains[i];
-			i++;
-			j++;
-		}
-		i = 0;
-	}
+	while (remains && remains[i])
+		array[j++] = remains[i++];
+	i = 0;
 	while (buffer[i])
-	{
-		array[j] = buffer[i];
-		i++;
-		j++;
-	}
+		array[j++] = buffer[i++];
 	array[size] = '\0';
 	free((void *)remains);
 	return (array);
 }
 
-char*push_line(char *remains)
+char	*push_line(char *remains)
 {
 	int		i;
 	char	*array;
 
 	i = 0;
-	while (remains[i] && remains[i] != '\n')
-		i++;
+	while (remains[i] && remains[i++] != '\n');
 	if (!(array = (char *)malloc(sizeof(char) * (i + 1))))
 		return (NULL);
-	i = 0;
-	while (remains[i] && remains[i] != '\n')
-	{
+	i = -1;
+	while (remains[++i] && remains[i] != '\n')
 		array[i] = remains[i];
-		i++;
-	}
 	array[i] = '\0';
 	return (array);
 }
