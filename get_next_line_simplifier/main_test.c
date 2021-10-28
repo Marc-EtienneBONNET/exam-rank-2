@@ -6,7 +6,7 @@
 /*   By: mbonnet <mbonnet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 10:28:36 by mbonnet           #+#    #+#             */
-/*   Updated: 2021/10/26 11:32:40 by mbonnet          ###   ########.fr       */
+/*   Updated: 2021/10/28 17:11:43 by mbonnet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,11 @@ int main(void)
 {
 	char	*line;
 	int		fd;
-	int x = 0;
 
-	fd = open("test_2.txt",O_RDONLY);
-	while ((line = get_next_line(fd)) != NULL && x < 3)
+	fd = open("test_3.txt",O_RDONLY);
+	while ((line = get_next_line(fd)) != NULL)
 	{
 		printf("(%s)\n", line);
-		x++;
 		free(line);
 	}
 	close(fd);

@@ -6,10 +6,10 @@
 /*   By: mbonnet <mbonnet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 10:08:21 by mbonnet           #+#    #+#             */
-/*   Updated: 2021/10/26 11:44:32 by mbonnet          ###   ########.fr       */
+/*   Updated: 2021/10/28 17:12:29 by mbonnet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "stdio.h"
+
 #include "get_next_line.h"
 
 int ft_strlen(char *str)
@@ -30,10 +30,7 @@ char	*ft_strjoin(char *remains, char *buffer)
 	int				j;
 
 	if (!remains && !buffer)
-	{
-		printf("ici\n");
 		return (NULL);
-	}
 	size = ft_strlen(remains) + ft_strlen(buffer);
 	if (!(array = (char *)malloc(sizeof(char) * (size + 1))))
 		return (NULL);
@@ -94,14 +91,17 @@ char	*cut_next_line(char *remains)
 
 int	ft_check_nl(char *str)
 {
-	int i;
+	int	i;
 
-	i = -1;
-	while (str && str[++i])
-		if (str[i] == '\n')
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+		if (str[i++] == '\n')
 			return (1);
 	return (0);
 }
+#include <stdio.h>
 
 char *get_next_line(int fd)
 {
@@ -112,9 +112,9 @@ char *get_next_line(int fd)
 
 	if (count == 0)
 	{
-		free(remains);
 		return (NULL);
 	}
+	buffer[0]='\0';
 	count = 1;
 	while (ft_check_nl(buffer) != 1 && count != 0)
 	{
