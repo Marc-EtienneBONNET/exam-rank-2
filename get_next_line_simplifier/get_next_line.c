@@ -30,7 +30,10 @@ char	*ft_strjoin(char *remains, char *buffer)
 	int				j;
 
 	if (!remains && !buffer)
+	{
+		printf("ici\n");
 		return (NULL);
+	}
 	size = ft_strlen(remains) + ft_strlen(buffer);
 	if (!(array = (char *)malloc(sizeof(char) * (size + 1))))
 		return (NULL);
@@ -52,6 +55,8 @@ char	*push_line(char *remains)
 	char	*array;
 
 	i = 0;
+	if (!remains)
+		return (NULL);
 	while (remains[i] && remains[i++] != '\n');
 	if (!(array = (char *)malloc(sizeof(char) * (i + 1))))
 		return (NULL);
@@ -70,6 +75,8 @@ char	*cut_next_line(char *remains)
 
 	i = 0;
 	j = 0;
+	if (!remains)
+		return (NULL);
 	while (remains[i] && remains[i++] != '\n');
 	if (!remains[i])
 	{
@@ -78,10 +85,8 @@ char	*cut_next_line(char *remains)
 	}
 	if (!(array = (char *)malloc(sizeof(char) * (ft_strlen(remains)- i + 1))))
 		return (NULL);
-	while (remains[++i])
-	{
-		array[j++] = remains[i];
-	}
+	while (remains[i])
+		array[j++] = remains[i++];
 	array[j] = '\0';
 	free(remains);
 	return (array);
@@ -98,26 +103,23 @@ int	ft_check_nl(char *str)
 	return (0);
 }
 
-char	*get_next_line(int fd)
+char *get_next_line(int fd)
 {
-	char		*buffer;
+	char		buffer[BUFFER_SIZE + 1];
 	static char	*remains = NULL;
-	static int	fin = 0;
-	int			count;
+	static int			count = 1;
 	char		*line;
 
-	count = 1;
-	buffer = NULL;
-	if (remains == NULL)
-		if (!(buffer=malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-			return (NULL);
-	if (fin == 1)
+	if (count == 0)
+	{
+		free(remains);
 		return (NULL);
-	while (!ft_check_nl(buffer) && count != 0)
+	}
+	count = 1;
+	while (ft_check_nl(buffer) != 1 && count != 0)
 	{
 		if ((count = read(fd, buffer, BUFFER_SIZE)) == -1)
 		{
-			free(buffer);
 			return (NULL);
 		}
 		buffer[count] = '\0';
@@ -125,8 +127,5 @@ char	*get_next_line(int fd)
 	}
 	line = push_line(remains);
 	remains = cut_next_line(remains);
-	if (count == 0)
-		fin = 1;
-	free(buffer);
 	return (line);
 }
