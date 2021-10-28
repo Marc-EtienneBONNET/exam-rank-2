@@ -6,7 +6,7 @@
 /*   By: mbonnet <mbonnet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 10:08:21 by mbonnet           #+#    #+#             */
-/*   Updated: 2021/10/28 17:12:29 by mbonnet          ###   ########.fr       */
+/*   Updated: 2021/10/28 17:14:57 by mbonnet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ int	ft_check_nl(char *str)
 			return (1);
 	return (0);
 }
-#include <stdio.h>
 
 char *get_next_line(int fd)
 {
