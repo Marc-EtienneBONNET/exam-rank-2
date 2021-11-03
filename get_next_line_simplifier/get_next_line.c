@@ -110,17 +110,13 @@ char *get_next_line(int fd)
 	char		*line;
 
 	if (count == 0)
-	{
 		return (NULL);
-	}
 	buffer[0]='\0';
 	count = 1;
 	while (ft_check_nl(buffer) != 1 && count != 0)
 	{
 		if ((count = read(fd, buffer, BUFFER_SIZE)) == -1)
-		{
 			return (NULL);
-		}
 		buffer[count] = '\0';
 		remains = ft_strjoin(remains, buffer);
 	}

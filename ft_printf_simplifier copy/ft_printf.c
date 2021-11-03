@@ -10,77 +10,75 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdarg.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdarg.h>
-
 int TOTALE = 0;
 
 void	ft_write(char c)
 {
-	TOTALE++;
+	TOTALE += 1;
 	write(1, &c, 1);
 }
 
 void	ft_putstr(char *str)
 {
-	int i; 
+	int i = -1;
 
-	i = 0;
-	while (str[i])
-		ft_write(str[i++]);
+	while (str[++i])
+		ft_write(str[i]);
 }
 
 int		check_num(int number)
 {
-	unsigned int size;
 	unsigned int num;
+	int			len;
 
-	size = 0;
+	len = 0;
 	if (number == 0)
 		return (1);
 	else if (number < 0)
 	{
-		size++;
+		len++;
 		num = number * -1;
 	}
 	else 
 		num = number;
 	while (num > 0)
 	{
+		len++;
 		num /= 10;
-		size++;
 	}
-	return (size);
+	return (len);
 }
 
-int check_long(unsigned int number)
+int	check_long(unsigned int number)
 {
-	unsigned int size;
+	int len;
 
-	size = 0;
+	len = 0;
 	if (number == 0)
 		return (1);
-	while (number > 0)
+	while(number > 0)
 	{
 		number /= 16;
-		size++;
+		len++;
 	}
-	return (size);
+	return (len);
 }
 
 char *get_num(int number, int size)
 {
 	unsigned int num;
-	char *array;
+	char *nb;
 
-	if (!(array = malloc(sizeof(char) * (size + 1))))
+	if (!(nb = malloc(sizeof(char) * (size + 1))))
 		return (NULL);
-	array[size] = '\0';
+	nb[size] = '\0';
 	if (number == 0)
 	{
-		array[0] = '0';
-		return (array);
+		nb[0] = '0';
+		return (nb);
 	}
 	else if (number < 0)
 		num = number * -1;
@@ -88,59 +86,59 @@ char *get_num(int number, int size)
 		num = number;
 	while (--size > 0)
 	{
-		array[size] = num % 10 + '0';
+		nb[size] = num % 10 + '0';
 		num /= 10;
 	}
 	if (number < 0)
-		array[size] = '-';
+		nb[size] = '-';
 	else 
-		array[size] = num % 10 + '0';
-	return (array);
+		nb[size] = num % 10 + '0';
+	return (nb);
 }
 
 char *get_long(unsigned int number, int size)
 {
-	char *array;
+	char *nb;
 	char *hex = "0123456789abcdef";
 
-	if (!(array = malloc(sizeof(char) * (size + 1))))
+	if (!(nb = malloc(sizeof(char) * (size + 1))))
 		return (NULL);
-	array[size] = '\0';
-	if (number < 0)
+	nb[size] = '\0';
+	if (number == 0)
 	{
-		array[0] = '0';
-		return (array);
+		nb[0] = '0';
+		return (nb);
 	}
 	while (--size > 0)
 	{
-		array[size] = hex[number % 16];
+		nb[size] = hex[number % 16];
 		number /= 16;
 	}
-	array[size] = hex[number % 16];
-	return (array);
+	nb[size] = hex[number % 16];
+	return (nb);
 }
 
-void	print_num(va_list value)
+void	ft_print_num(va_list value)
 {
-	int number;
+	int num;
 	char *str_num;
 
-	number = va_arg(value, int);
-	str_num = get_num(number, check_num(number));
+	num = va_arg(value, int);
+	str_num = get_num(num, check_num(num));
 	ft_putstr(str_num);
 }
 
-void	print_long(va_list value)
+void	ft_print_xxx(va_list value)
 {
-	unsigned int number;
+	unsigned int num;
 	char *str_num;
 
-	number = va_arg(value, unsigned int);
-	str_num = get_long(number, check_long(number));
+	num = va_arg(value, unsigned int);
+	str_num = get_long(num, check_long(num));
 	ft_putstr(str_num);
 }
 
-void	print_str(va_list value)
+void ft_print_str(va_list value)
 {
 	char *str;
 
@@ -151,17 +149,17 @@ void	print_str(va_list value)
 		ft_putstr(str);
 }
 
-void	choose_flag(char c, va_list value)
+void	ft_choose_flags(char c, va_list value)
 {
 	if (c == 'd')
-		print_num(value);
+		ft_print_num(value);
+	if (c== 's')
+		ft_print_str(value);
 	if (c == 'x')
-		print_long(value);
-	if (c == 's')
-		print_str(value);
+		ft_print_xxx(value);
 }
 
-int ft_printf(char *str, ...)
+int	ft_printf(char *str, ...)
 {
 	int i;
 	va_list value;
@@ -172,7 +170,7 @@ int ft_printf(char *str, ...)
 	while (str[i])
 	{
 		if (str[i] == '%')
-			choose_flag(str[++i], value);
+			ft_choose_flags(str[++i], value);
 		else 
 			ft_write(str[i]);
 		i++;
@@ -180,4 +178,3 @@ int ft_printf(char *str, ...)
 	va_end(value);
 	return (TOTALE);
 }
-
